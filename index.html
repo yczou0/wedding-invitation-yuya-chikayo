@@ -8,122 +8,123 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
     <style>
         :root { --forest-green: #2D402E; --ivory: #F3F0E7; }
-        body, html { margin: 0; padding: 0; background-color: var(--ivory); font-family: 'Cormorant Garamond', serif; }
+        
+        /* 画面全体のスクロールを許可し、はみ出しを隠す */
+        body, html { 
+            margin: 0; padding: 0; 
+            background-color: var(--ivory); 
+            font-family: 'Cormorant Garamond', serif;
+            min-height: 100vh;
+        }
 
-        /* ステージ設定 */
-        .stage {
-            min-height: 150vh; /* カードが出た後にスクロールできるよう高さを確保 */
+        .main-container {
             width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding-top: 150px;
-            overflow-x: hidden;
+            /* 封筒を最初から少し下げた位置に配置 */
+            padding-top: 35vh; 
+            padding-bottom: 100px;
         }
 
-        /* 封筒本体 */
-        .envelope-wrapper {
+        /* 封筒の親要素（ここからはみ出さないようにする） */
+        .envelope-system {
             position: relative;
-            width: 340px;
-            height: 240px;
-            perspective: 1000px;
+            width: 320px;
+            height: 220px;
+            z-index: 10;
         }
 
         /* 封筒の背面 */
         .env-back {
             position: absolute; width: 100%; height: 100%;
             background: var(--forest-green);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
             z-index: 1;
+        }
+
+        /* 封筒の前面（底を物理的に閉じる） */
+        .env-front {
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--forest-green);
+            /* 下半分をしっかり覆う */
+            clip-path: polygon(0 35%, 100% 35%, 100% 100%, 0 100%);
+            z-index: 8;
         }
 
         /* 封筒の蓋 */
         .flap {
             position: absolute; top: 0; left: 0;
             width: 0; height: 0;
-            border-left: 170px solid transparent;
-            border-right: 170px solid transparent;
-            border-top: 140px solid var(--forest-green);
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 130px solid var(--forest-green);
             transform-origin: top;
             z-index: 10;
-            animation: openFlap 1.2s forwards 1s;
+            animation: openFlap 1s forwards 1s;
         }
 
-        /* 招待状カード（RSVPを含む） */
+        /* 招待状カード（RSVP含む） */
         .card {
             position: absolute;
-            bottom: 10px;
-            left: 15px;
-            width: 310px;
-            height: 600px; /* RSVPを入れるために長く設定 */
+            bottom: 10px; left: 10px;
+            width: 300px;
+            height: 550px; /* カードの高さ */
             background: var(--ivory);
             border: 1px solid var(--forest-green);
             z-index: 5;
-            padding: 40px 20px;
+            padding: 40px 15px;
             box-sizing: border-box;
             text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            /* アニメーション */
-            animation: slideUp 2s forwards 2.5s;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            /* アニメーション：画面中央付近まで上げる */
+            animation: slideToCenter 2s forwards 2.5s;
         }
 
-        /* 封筒の前面パーツ（これがカードの下を隠します） */
-        .env-front {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 100%;
-            background: var(--forest-green);
-            /* V字に切り抜いてポケット状にする */
-            clip-path: polygon(0 45%, 100% 45%, 100% 100%, 0 100%);
-            z-index: 8;
+        @keyframes openFlap {
+            to { transform: rotateX(180deg); z-index: 1; }
         }
 
-        /* アニメーション */
-        @keyframes openFlap { to { transform: rotateX(180deg); z-index: 1; } }
-        @keyframes slideUp { to { transform: translateY(-450px); } }
+        /* カードを適切な位置（画面中央）で止める */
+        @keyframes slideToCenter {
+            to { transform: translateY(-400px); }
+        }
 
         /* カード内部のデザイン */
         .card-inner {
             border: 1px solid var(--forest-green);
             outline: 3px double var(--forest-green);
-            outline-offset: -10px;
+            outline-offset: -8px;
+            height: 100%;
             padding: 30px 10px;
+            overflow-y: auto; /* 万が一入りきらない場合もカード内でスクロール可 */
         }
 
-        .names { font-size: 1.8rem; margin: 20px 0; }
+        .names { font-size: 1.6rem; margin: 15px 0; color: var(--forest-green); }
         
-        /* カード内のRSVPフォーム */
         .card-rsvp {
-            margin-top: 40px;
-            padding-top: 30px;
+            margin-top: 30px;
             border-top: 1px solid var(--forest-green);
+            padding-top: 20px;
         }
 
         .card-rsvp input, .card-rsvp select {
-            width: 100%;
-            margin-bottom: 15px;
-            padding: 8px;
-            border: none;
-            border-bottom: 1px solid var(--forest-green);
-            background: transparent;
-            font-family: inherit;
+            width: 100%; margin-bottom: 10px; padding: 8px;
+            border: none; border-bottom: 1px solid var(--forest-green);
+            background: transparent; font-family: inherit;
         }
 
-        .submit-btn {
-            background: var(--forest-green);
-            color: var(--ivory);
-            border: none;
-            padding: 10px 30px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 10px;
+        .btn {
+            background: var(--forest-green); color: var(--ivory);
+            border: none; padding: 10px 20px; font-weight: bold; margin-top: 10px;
         }
     </style>
 </head>
 <body>
 
-    <div class="stage">
-        <div class="envelope-wrapper">
+    <div class="main-container">
+        <div class="envelope-system">
             <div class="flap"></div>
             <div class="env-back"></div>
             
@@ -132,17 +133,17 @@
                     <p style="font-size: 0.7rem; letter-spacing: 2px;">INVITATION</p>
                     <div class="names">GENEVIEVE<br>& CHARLES</div>
                     <p>JUNE 14, 2026</p>
-                    <p>TUSCANY, ITALY</p>
+                    <p style="font-size: 0.8rem; margin-top: 5px;">TUSCANY, ITALY</p>
 
                     <div class="card-rsvp">
-                        <p style="font-size: 1.2rem; letter-spacing: 2px; margin-bottom: 20px;">RSVP</p>
+                        <p style="font-size: 1rem; letter-spacing: 2px; margin-bottom: 15px;">RSVP</p>
                         <input type="text" placeholder="Your Name">
                         <select>
                             <option value="">Attendance</option>
                             <option value="yes">Accepts with pleasure</option>
                             <option value="no">Declines with regret</option>
                         </select>
-                        <button class="submit-btn">SEND</button>
+                        <button class="btn">SEND RESPONSE</button>
                     </div>
                 </div>
             </div>
