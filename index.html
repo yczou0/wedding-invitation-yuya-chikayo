@@ -21,59 +21,53 @@
             position: relative;
             width: 340px; height: 600px;
             display: flex; justify-content: center; align-items: center;
-            perspective: 1200px;
+            perspective: 2000px; /* 3D効果を強調 */
         }
 
-        /* --- 招待状カード（二つ折り構造） --- */
+        /* --- 招待状カード（二つ折り） --- */
         .card-container {
             position: absolute;
-            top: 280px; /* 封筒の中 */
-            width: 310px; height: 260px; /* 折り畳み時のサイズ */
-            z-index: 5;
-            animation: slideUp 2s forwards 2.5s;
+            top: 280px; /* 封筒の初期位置 */
+            width: 310px; height: 260px;
+            z-index: 5; /* 最初は封筒の背面のすぐ前 */
+            animation: 
+                slideUp 2s forwards 2.5s, 
+                bringToFront 0.1s forwards 4.5s; /* 広がる直前に手前に持ってくる */
             transform-style: preserve-3d;
         }
 
-        /* 上半分（固定） */
         .card-top {
             position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
             background: var(--ivory);
             border: 1px solid var(--forest-green);
-            border-bottom: none;
-            box-sizing: border-box;
-            padding: 30px 15px;
-            text-align: center;
+            box-sizing: border-box; padding: 30px 15px; text-align: center;
             z-index: 2;
         }
 
-        /* 下半分（折り畳まれる部分） */
         .card-bottom {
             position: absolute; top: 100%; left: 0;
             width: 100%; height: 100%;
             background: var(--ivory);
             border: 1px solid var(--forest-green);
-            border-top: 1px dashed rgba(45, 64, 46, 0.3);
-            box-sizing: border-box;
-            padding: 20px 15px;
-            text-align: center;
-            /* 最初は上に折りたたむ */
+            border-top: 1px dashed rgba(45, 64, 46, 0.2);
+            box-sizing: border-box; padding: 20px 15px;
             transform-origin: top;
-            transform: rotateX(-179deg);
+            transform: rotateX(179deg); /* 最初は後ろに折りたたむ */
             backface-visibility: hidden;
-            z-index: 1;
-            animation: unfold 1.2s forwards 4.5s;
+            animation: unfold 1.2s cubic-bezier(0.4, 0, 0.2, 1) forwards 4.6s;
         }
 
         @keyframes slideUp { to { top: 50px; } }
+        @keyframes bringToFront { to { z-index: 20; } } /* 封筒の全パーツより手前に */
         @keyframes unfold { to { transform: rotateX(0deg); } }
 
-        /* --- 封筒グループ（消える演出） --- */
+        /* --- 封筒 --- */
         .envelope-group {
             position: absolute; top: 280px;
             width: 340px; height: 240px;
             z-index: 10;
-            animation: fadeOutEnv 0.8s forwards 6s;
+            animation: fadeOutEnv 0.8s forwards 6.5s;
         }
 
         .env-back {
@@ -100,13 +94,13 @@
         }
 
         @keyframes openFlap { to { transform: rotateX(180deg); z-index: 1; } }
-        @keyframes fadeOutEnv { to { opacity: 0; visibility: hidden; transform: translateY(20px); } }
+        @keyframes fadeOutEnv { to { opacity: 0; visibility: hidden; } }
 
-        /* --- 装飾・テキスト --- */
+        /* --- テキスト・フォーム --- */
         .names { font-size: 1.8rem; margin: 15px 0; color: var(--forest-green); font-weight: 600; }
-        .rsvp-form { text-align: left; }
-        input, select { width: 100%; margin-bottom: 8px; padding: 6px; border: none; border-bottom: 1px solid var(--forest-green); background: transparent; font-family: inherit; }
-        .btn { background: var(--forest-green); color: var(--ivory); border: none; padding: 10px; font-weight: bold; width: 100%; margin-top: 5px; }
+        .rsvp-form { text-align: left; border-top: 1px solid var(--forest-green); padding-top: 10px; }
+        input, select { width: 100%; margin-bottom: 8px; padding: 6px; border: none; border-bottom: 1px solid var(--forest-green); background: transparent; font-family: inherit; font-size: 0.8rem; }
+        .btn { background: var(--forest-green); color: var(--ivory); border: none; padding: 10px; font-weight: bold; width: 100%; margin-top: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -114,14 +108,13 @@
     <div class="wrapper">
         <div class="card-container">
             <div class="card-top">
-                <p style="font-size: 0.7rem; letter-spacing: 3px;">INVITATION</p>
+                <p style="font-size: 0.6rem; letter-spacing: 3px;">INVITATION</p>
                 <div class="names">GENEVIEVE<br>& CHARLES</div>
-                <p style="font-size: 0.9rem;">JUNE 14, 2026</p>
-                <p style="font-size: 0.7rem; color: #888; margin-top: 20px;">▼ Scroll to RSVP ▼</p>
+                <p style="font-size: 0.8rem;">JUNE 14, 2026</p>
             </div>
             <div class="card-bottom">
                 <div class="rsvp-form">
-                    <p style="text-align: center; font-size: 0.8rem; margin-bottom: 10px;">RSVP</p>
+                    <p style="text-align: center; font-size: 0.8rem; margin: 0 0 10px 0;">RSVP</p>
                     <input type="text" placeholder="Your Name">
                     <select>
                         <option value="">Attendance</option>
