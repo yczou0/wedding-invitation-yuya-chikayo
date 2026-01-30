@@ -13,44 +13,21 @@
             margin: 0; padding: 0; width: 100%; height: 100%;
             background-color: var(--ivory); 
             font-family: 'Cormorant Garamond', serif;
-            overflow: hidden; /* 演出中は勝手に動かないように固定 */
-        }
-
-        /* 全体の配置：画面の真ん中を基準にする */
-        .viewport {
-            position: relative;
-            width: 100%; height: 100vh;
+            overflow: hidden; /* 演出中は余計なスクロールを防止 */
             display: flex; justify-content: center; align-items: center;
         }
 
-        /* 招待状カード */
-        .card {
-            position: absolute;
-            bottom: 0; /* 最初は封筒の中に隠れる位置 */
-            width: 300px; height: 500px;
-            background: var(--ivory);
-            border: 1px solid var(--forest-green);
-            z-index: 5;
-            padding: 30px 15px;
-            box-sizing: border-box;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-            /* アニメーション：画面中央までせり上がる */
-            animation: slideToCenter 2s forwards 2.5s;
-        }
-
-        @keyframes slideToCenter {
-            /* 画面中央に収まるようにマイナス値を調整 */
-            to { transform: translateY(-120px); }
-        }
-
-        /* 封筒アッセンブリ */
-        .envelope {
+        /* 封筒とカードを囲むメインコンテナ */
+        .envelope-system {
             position: relative;
-            width: 320px; height: 220px;
-            z-index: 10;
+            width: 340px; /* 封筒の幅 */
+            height: 240px; /* 封筒の高さ */
+            perspective: 1000px;
+            /* 封筒ごとフェードアウト */
+            animation: fadeOutEnvelope 0.8s forwards 4.5s; /* カード登場後にフェードアウト開始 */
         }
 
+        /* 封筒の背面 */
         .env-back {
             position: absolute; width: 100%; height: 100%;
             background: var(--forest-green);
@@ -58,36 +35,56 @@
             z-index: 1;
         }
 
+        /* 封筒の蓋 */
         .flap {
             position: absolute; top: 0; left: 0;
             width: 0; height: 0;
-            border-left: 160px solid transparent;
-            border-right: 160px solid transparent;
-            border-top: 130px solid var(--forest-green);
+            border-left: 170px solid transparent; /* 封筒幅の半分 */
+            border-right: 170px solid transparent; /* 封筒幅の半分 */
+            border-top: 140px solid var(--forest-green); /* 蓋の高さ */
             transform-origin: top;
             z-index: 10;
-            animation: openFlap 1s forwards 1s;
+            animation: openFlap 1s forwards 1s; /* 1秒後に開くアニメーション開始 */
         }
 
         @keyframes openFlap {
             to { transform: rotateX(180deg); z-index: 1; }
         }
 
+        /* 封筒の前面 */
         .env-front {
             position: absolute; bottom: 0; left: 0;
             width: 100%; height: 100%;
             background: var(--forest-green);
-            clip-path: polygon(0 35%, 100% 35%, 100% 100%, 0 100%);
+            /* 下半分をV字に隠すクリップパス */
+            clip-path: polygon(0 40%, 100% 40%, 100% 100%, 0 100%);
             z-index: 8;
         }
 
-        /* 【重要】底のはみ出しを物理的に隠すガード */
-        .bottom-guard {
+        /* 招待状カード */
+        .card {
             position: absolute;
-            bottom: -500px; left: -20px;
-            width: 360px; height: 500px;
-            background-color: var(--ivory); /* 背景と同じ色で隠す */
-            z-index: 9;
+            bottom: -500px; /* 最初は画面外の下に隠しておく */
+            left: 20px; /* 封筒内の位置調整 */
+            width: 300px;
+            height: 500px; /* カードの高さ */
+            background: var(--ivory);
+            border: 1px solid var(--forest-green);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            z-index: 5;
+            padding: 30px 15px;
+            box-sizing: border-box;
+            text-align: center;
+            /* アニメーション：中央にせり上がってきて止まる */
+            animation: slideToCenter 2s forwards 2.5s;
+        }
+
+        @keyframes slideToCenter {
+            to { transform: translateY(-370px); } /* 封筒の高さ + カードがはみ出す高さ */
+        }
+
+        @keyframes fadeOutEnvelope {
+            to { opacity: 0; visibility: hidden; transform: scale(0.9); }
         }
 
         /* カード内部のデザイン */
@@ -96,42 +93,77 @@
             outline: 3px double var(--forest-green);
             outline-offset: -8px;
             height: 100%;
-            display: flex; flex-direction: column; justify-content: center;
+            padding: 20px 10px;
+            display: flex; flex-direction: column; justify-content: space-between;
         }
         .names { font-size: 1.6rem; margin: 15px 0; color: var(--forest-green); line-height: 1.2; }
-        .rsvp-form { margin-top: 20px; border-top: 1px solid var(--forest-green); padding-top: 20px; }
-        input, select { width: 100%; margin-bottom: 10px; padding: 8px; border: none; border-bottom: 1px solid var(--forest-green); background: transparent; font-family: inherit; font-size: 0.9rem; }
-        .btn { background: var(--forest-green); color: var(--ivory); border: none; padding: 10px 20px; font-weight: bold; width: 100%; margin-top: 10px; }
+        
+        .card-top-content {
+            flex-grow: 1; /* スペースを埋める */
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* 上部コンテンツを中央寄せ */
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        .card-rsvp {
+            border-top: 1px solid var(--forest-green);
+            padding-top: 20px;
+            text-align: left; /* RSVPフォームのテキストを左寄せに */
+            color: var(--forest-green);
+        }
+        
+        .rsvp-label { font-size: 0.9rem; margin-bottom: 5px; display: block; }
+        .rsvp-input, .rsvp-select { 
+            width: 100%; margin-bottom: 10px; padding: 8px; 
+            border: none; border-bottom: 1px solid var(--forest-green); 
+            background: transparent; font-family: inherit; font-size: 0.9rem; 
+            color: var(--forest-green); box-sizing: border-box;
+        }
+        .btn { 
+            background: var(--forest-green); color: var(--ivory); 
+            border: none; padding: 10px 20px; font-weight: bold; width: 100%; 
+            margin-top: 10px; cursor: pointer;
+        }
+        
+        /* フォントの微調整 */
+        .ornament { font-size: 1.2rem; margin: 5px 0; }
+        .small-text { font-size: 0.7rem; letter-spacing: 1px; }
+
     </style>
 </head>
 <body>
 
-    <div class="viewport">
-        <div class="envelope">
-            <div class="flap"></div>
-            <div class="env-back"></div>
-            
-            <div class="card">
-                <div class="card-inner">
-                    <p style="font-size: 0.7rem; letter-spacing: 2px;">INVITATION</p>
+    <div class="envelope-system">
+        <div class="flap"></div>
+        <div class="env-back"></div>
+        
+        <div class="card">
+            <div class="card-inner">
+                <div class="card-top-content">
+                    <p class="small-text">INVITATION</p>
+                    <div class="ornament">• • • • •</div>
                     <div class="names">GENEVIEVE<br>& CHARLES</div>
                     <p style="font-size: 0.9rem;">JUNE 14, 2026</p>
+                </div>
 
-                    <div class="rsvp-form">
-                        <p style="font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 10px;">RSVP</p>
-                        <input type="text" placeholder="Your Name">
-                        <select>
-                            <option value="">Attendance</option>
-                            <option value="yes">Accepts with pleasure</option>
-                            <option value="no">Declines with regret</option>
-                        </select>
-                        <button class="btn">SEND RESPONSE</button>
-                    </div>
+                <div class="card-rsvp">
+                    <p style="font-size: 0.9rem; letter-spacing: 1px; margin-bottom: 10px; text-align: center;">RSVP</p>
+                    <label for="your-name" class="rsvp-label">Your Name</label>
+                    <input type="text" id="your-name" class="rsvp-input">
+                    
+                    <label for="attendance" class="rsvp-label">Attendance</label>
+                    <select id="attendance" class="rsvp-select">
+                        <option value="yes">Accepts with pleasure</option>
+                        <option value="no">Declines with regret</option>
+                    </select>
+                    <button class="btn">SEND RESPONSE</button>
                 </div>
             </div>
+        </div>
 
-            <div class="env-front"></div>
-            <div class="bottom-guard"></div> </div>
+        <div class="env-front"></div>
     </div>
 
 </body>
