@@ -16,7 +16,6 @@
             overflow: hidden; 
         }
 
-        /* 黒い外枠 */
         .outer-frame {
             position: relative; 
             width: calc(100% - 40px); 
@@ -51,43 +50,45 @@
             z-index: 10;
         }
 
-        /* 扇子画像エリア */
+        /* 扇子コンテナ：サイズを拡大 (280px -> 340px) */
         .fan-box {
             position: relative;
-            width: 280px;
-            height: 180px;
-            margin-bottom: 20px;
+            width: 340px; 
+            height: 220px;
+            margin-bottom: 10px;
         }
 
         .fan-img {
             width: 100%;
             height: 100%;
-            /* GitHubにアップロードしたファイル名が「fan.jfif」であることを想定 */
             background-image: url('fan.jfif'); 
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
         }
 
-        /* 扇子の上に重ねる名前 */
+        /* 文字位置の微調整：扇子の紙部分（上半分）にフィットさせる */
         .yc-name {
             position: absolute;
-            top: 38%; 
+            top: 30%; /* 少し上に持ち上げて紙の部分へ移動 */
             left: 50%;
-            transform: translateX(-50%) rotate(-2deg);
+            transform: translateX(-50%) rotate(-1deg);
             font-family: 'Water Brush', cursive;
-            font-size: 2.8rem;
+            font-size: 3.2rem; /* 扇子に合わせて少し大きく */
             color: var(--black);
             white-space: nowrap;
             pointer-events: none;
+            /* 読みやすくするための微かな光彩 */
+            text-shadow: 0 0 5px rgba(255,255,255,0.8);
         }
 
         .welcome-text { 
-            font-size: 1.5rem; 
+            font-size: 1.6rem; 
             color: var(--black); 
-            letter-spacing: 4px; 
+            letter-spacing: 5px; 
             text-align: center;
-            margin-top: 10px;
+            margin-top: 15px;
+            line-height: 1.4;
         }
 
         .tap-hint { 
@@ -107,7 +108,6 @@
             min-height: 100%; 
         }
         
-        /* 詳細画面トップのイメージ画像 */
         .detail-hero-img {
             width: 100%; 
             height: 240px;
@@ -123,7 +123,6 @@
         .info-block h3 { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.7; }
         .info-block p { font-size: 1.1rem; line-height: 1.6; margin: 0; }
 
-        /* RSVPフォーム */
         .rsvp-form { margin-top: 50px; border-top: 1px solid var(--black); padding-top: 40px; }
         input, select { 
             width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--black); 
@@ -134,7 +133,6 @@
             width: 100%; font-weight: bold; cursor: pointer; letter-spacing: 2px; 
         }
 
-        /* 画面切替用クラス */
         .welcome-screen.hide { transform: translateY(-100%); }
         .detail-screen.show { opacity: 1; }
     </style>
@@ -181,7 +179,6 @@
     </div>
 
     <script>
-        // クリックで画面遷移
         document.getElementById('welcomeScreen').addEventListener('click', function() {
             this.classList.add('hide');
             document.getElementById('detailScreen').classList.add('show');
