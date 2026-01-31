@@ -6,196 +6,206 @@
     <title>Wedding Invitation</title>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
     <style>
-        :root { --forest-green: #2D402E; --ivory: #F3F0E7; }
+        :root { 
+            --forest-green: #2D402E; 
+            --pure-white: #FFFFFF; 
+        }
         
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%;
-            background-color: var(--ivory); 
+            background-color: var(--pure-white); 
             font-family: 'Cormorant Garamond', serif;
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden; /* 全体のスクロールはなし */
+            overflow: hidden;
         }
 
-        /* 全体を包むコンテナ */
-        .invitation-container {
+        /* 外枠の設定 */
+        .outer-frame {
             position: relative;
-            width: 340px; /* スマートフォンサイズを想定 */
-            height: 100vh; /* 画面全体の高さを利用 */
-            overflow-y: auto; /* 詳細ページでスクロールが必要になる場合を想定 */
-            background-color: var(--ivory);
-            box-shadow: 0 0 20px rgba(0,0,0,0.05);
-            -webkit-overflow-scrolling: touch; /* iOSのスクロールを滑らかに */
+            width: calc(100% - 40px);
+            height: calc(100% - 40px);
+            max-width: 400px;
+            max-height: 700px;
+            border: 3px solid var(--forest-green); /* フォレストグリーンの外枠 */
+            background-color: var(--pure-white);
+            overflow: hidden;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 内部コンテナ（スクロール用） */
+        .invitation-container {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         /* --- Welcome画面 --- */
         .welcome-screen {
             position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            background-color: var(--ivory);
-            transition: transform 0.8s ease-out;
-            cursor: pointer; /* タップ可能であることを示す */
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--pure-white);
+            transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+            cursor: pointer;
             text-align: center;
             padding: 20px;
-            box-sizing: border-box;
             z-index: 10;
         }
 
         .welcome-text {
-            font-size: 2.2rem;
+            font-size: 2rem;
             color: var(--forest-green);
             font-weight: 600;
-            margin-bottom: 30px;
-            line-height: 1.2;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
         }
 
         .welcome-photo {
-            width: 280px; /* コンテナ内での写真の幅 */
-            height: 200px; /* 写真の高さ */
-            background-color: #D3D3D3; /* 仮の画像の色 */
-            background-image: url('https://via.placeholder.com/280x200?text=Your+Wedding+Photo'); /* イメージ画像 */
+            width: 80%;
+            aspect-ratio: 3/4;
+            background-image: url('https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&q=80&w=1000');
             background-size: cover;
             background-position: center;
             border: 1px solid var(--forest-green);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            filter: sepia(20%);
         }
 
         /* --- Detail画面 --- */
         .detail-screen {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; min-height: 100%; /* 内容に応じて伸びる */
-            background-color: var(--ivory);
-            transform: translateY(100vh); /* 最初は画面外の下に隠す */
-            transition: transform 0.8s ease-out;
-            padding: 40px 20px;
-            box-sizing: border-box;
-            z-index: 5; /* Welcome画面の下に隠す */
+            padding: 60px 30px;
+            background-color: var(--pure-white);
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
         .detail-title {
             font-size: 1.8rem;
             color: var(--forest-green);
-            font-weight: 600;
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--forest-green);
+            display: inline-block;
+            width: 100%;
+            padding-bottom: 10px;
         }
 
         .detail-section {
-            margin-bottom: 30px;
-            border-bottom: 1px dashed rgba(45, 64, 46, 0.2);
-            padding-bottom: 20px;
+            margin-bottom: 40px;
+            text-align: center;
         }
-        .detail-section:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
 
         .detail-section h3 {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             color: var(--forest-green);
-            margin-bottom: 10px;
-            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
         }
+
         .detail-section p {
-            font-size: 0.9rem;
-            color: #555;
-            line-height: 1.6;
-            text-align: center;
+            font-size: 1rem;
+            color: #333;
+            line-height: 1.8;
         }
 
         /* RSVPフォーム */
         .rsvp-form {
-            margin-top: 30px;
-        }
-        .rsvp-form p {
-            font-size: 0.9rem;
-            color: var(--forest-green);
-            text-align: center;
-            margin-bottom: 15px;
-        }
-        input, select {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border: none;
-            border-bottom: 1px solid var(--forest-green);
-            background-color: transparent;
-            font-family: inherit;
-            font-size: 0.9rem;
-            color: var(--forest-green);
-            box-sizing: border-box;
-            outline: none;
-        }
-        select {
-            -webkit-appearance: none; /* デフォルトのスタイルを無効化 */
-            -moz-appearance: none;
-            appearance: none;
-            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232D402E%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-6.5%200-12.1%203.4-14.7%208.1-2.6%204.7-1.3%2010.4%203.1%2014.2l128%20127.9c4.2%204.2%2011%204.2%2015.2%200l128-127.9c4.5-3.8%205.8-9.5%203.2-14.2z%22%2F%3E%3C%2Fsvg%3E');
-            background-repeat: no-repeat;
-            background-position: right 10px center;
-            background-size: 12px;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px solid var(--forest-green);
         }
 
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid var(--forest-green);
+            background-color: var(--pure-white);
+            font-family: inherit;
+            box-sizing: border-box;
+            color: var(--forest-green);
+        }
 
         .btn {
             background-color: var(--forest-green);
-            color: var(--ivory);
-            padding: 15px;
+            color: var(--pure-white);
+            padding: 18px;
             border: none;
             width: 100%;
             font-size: 1rem;
-            font-weight: 600;
+            font-weight: bold;
+            letter-spacing: 2px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .btn:hover {
-            background-color: #3e5a3f;
         }
 
-        /* JavaScriptで追加されるクラス */
+        /* アニメーション用クラス */
         .welcome-screen.hidden {
-            transform: translateY(-100vh); /* 上にスライドして隠れる */
+            transform: translateY(-100%);
         }
         .detail-screen.visible {
-            transform: translateY(0); /* 下からスライドして表示される */
+            opacity: 1;
+        }
+
+        .tap-hint {
+            margin-top: 30px;
+            font-size: 0.8rem;
+            color: var(--forest-green);
+            letter-spacing: 1px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
     </style>
 </head>
 <body>
 
-    <div class="invitation-container" id="invitationContainer">
-        <div class="welcome-screen" id="welcomeScreen">
-            <p class="welcome-text">
-                WELCOME TO<br>OUR WEDDING
-            </p>
-            <div class="welcome-photo"></div>
-            <p style="font-size: 0.8rem; color: #777; margin-top: 30px;">Tap to view details</p>
-        </div>
-
-        <div class="detail-screen" id="detailScreen">
-            <h2 class="detail-title">Our Special Day</h2>
-
-            <div class="detail-section">
-                <h3>Date & Time</h3>
-                <p>June 14, 2026<br>Ceremony: 3:00 PM<br>Reception: 5:00 PM</p>
+    <div class="outer-frame">
+        <div class="invitation-container" id="invitationContainer">
+            
+            <div class="welcome-screen" id="welcomeScreen">
+                <div class="welcome-text">
+                    WELCOME TO<br>OUR WEDDING
+                </div>
+                <div class="welcome-photo"></div>
+                <div class="tap-hint">Tap to Open</div>
             </div>
 
-            <div class="detail-section">
-                <h3>Venue</h3>
-                <p>The Grand Ballroom<br>123 Main Street, Cityville</p>
+            <div class="detail-screen" id="detailScreen">
+                <h2 class="detail-title">Invitation</h2>
+
+                <div class="detail-section">
+                    <h3>The Day</h3>
+                    <p>Saturday, June 14, 2026<br>3:00 PM - Ceremony</p>
+                </div>
+
+                <div class="detail-section">
+                    <h3>The Place</h3>
+                    <p>Grand View Garden<br>456 Rose Lane, Tokyo</p>
+                </div>
+
+                <div class="rsvp-form">
+                    <h3 style="text-align: center; letter-spacing: 3px;">RSVP</h3>
+                    <p style="text-align: center; font-size: 0.8rem; margin-bottom: 20px;">Please respond by May 1st</p>
+                    <input type="text" placeholder="Full Name">
+                    <select>
+                        <option value="" disabled selected>Will you join us?</option>
+                        <option value="yes">Joyfully Accepts</option>
+                        <option value="no">Regretfully Declines</option>
+                    </select>
+                    <textarea placeholder="Message to the Couple" rows="3"></textarea>
+                    <button class="btn">SEND RESPONSE</button>
+                </div>
             </div>
 
-            <div class="rsvp-form">
-                <p>Please RSVP by May 14, 2026</p>
-                <input type="text" placeholder="Your Full Name">
-                <input type="email" placeholder="Your Email">
-                <select>
-                    <option value="" disabled selected>Will you attend?</option>
-                    <option value="yes">Joyfully Accepts</option>
-                    <option value="no">Regretfully Declines</option>
-                </select>
-                <textarea placeholder="Any message or dietary restrictions?" rows="3"></textarea>
-                <button class="btn">SEND RSVP</button>
-            </div>
         </div>
     </div>
 
@@ -203,7 +213,6 @@
         document.getElementById('welcomeScreen').addEventListener('click', function() {
             document.getElementById('welcomeScreen').classList.add('hidden');
             document.getElementById('detailScreen').classList.add('visible');
-            // 詳細画面が表示されたら、コンテナのスクロールを一番上に戻す
             document.getElementById('invitationContainer').scrollTop = 0;
         });
     </script>
