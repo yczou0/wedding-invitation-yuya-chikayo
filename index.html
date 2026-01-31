@@ -2,99 +2,211 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Wedding Invitation</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Noto+Serif+JP:wght@300&display=swap" rel="stylesheet">
     <style>
         :root { --forest-green: #2D402E; --ivory: #F3F0E7; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--ivory); display: flex; justify-content: center; align-items: center; overflow-x: hidden; font-family: 'Cormorant Garamond', serif; }
-
-        /* 全体コンテナ */
-        .wrapper { position: relative; width: 340px; height: 500px; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 50px; }
-
-        /* 1. 封筒の土台 (背面) */
-        .envelope {
-            position: absolute; bottom: 50px; width: 340px; height: 240px;
-            background: var(--forest-green); z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        /* 2. カード：最初は封筒の中に完全に隠す */
-        .card {
-            position: absolute; bottom: 60px; /* 封筒の内側に配置 */
-            width: 310px; height: 440px; background: var(--ivory); border: 1px solid var(--forest-green);
-            z-index: 2; /* 背面(1)と前面(3)の間 */
-            display: flex; flex-direction: column;
-            transform: translateY(180px); /* 封筒の底に沈める */
-            opacity: 0;
-            transition: all 0.5s;
-            animation: slideUpAndStay 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards 2.5s;
-        }
-
-        /* 3. 封筒の前面：V字カット */
-        .env-front {
-            position: absolute; bottom: 50px; width: 340px; height: 240px;
-            background: var(--forest-green); z-index: 3;
-            clip-path: polygon(0 40%, 50% 60%, 100% 40%, 100% 100%, 0 100%);
-        }
-
-        /* 4. 封筒の蓋 */
-        .flap {
-            position: absolute; bottom: 240px; left: 0;
-            border-left: 170px solid transparent; border-right: 170px solid transparent;
-            border-top: 135px solid var(--forest-green);
-            transform-origin: bottom; z-index: 4;
-            animation: openFlap 1.2s forwards 1s;
-        }
-
-        /* アニメーション */
-        @keyframes openFlap { to { transform: rotateX(180deg) translateY(270px); z-index: 0; } }
         
-        @keyframes slideUpAndStay {
-            0% { transform: translateY(180px); opacity: 0; }
-            20% { opacity: 1; }
-            100% { transform: translateY(-240px); opacity: 1; z-index: 100; }
+        body, html { 
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--ivory); 
+            font-family: 'Cormorant Garamond', serif;
+            display: flex; justify-content: center; align-items: center;
+            overflow: hidden; /* 全体のスクロールはなし */
         }
 
-        /* カード内部：上下に分割せず、1枚の長いカードとして扱う（突き抜け防止） */
-        .card-content { padding: 30px 20px; flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .names { font-size: 1.8rem; color: var(--forest-green); font-weight: 600; margin: 20px 0; line-height: 1.2; }
-        .rsvp-section { width: 100%; margin-top: auto; border-top: 1px dashed var(--forest-green); padding-top: 20px; }
-        
-        input, select { width: 100%; margin-bottom: 10px; padding: 10px; border: none; border-bottom: 1px solid var(--forest-green); background: transparent; font-family: inherit; font-size: 0.9rem; }
-        .btn { background: var(--forest-green); color: var(--ivory); border: none; padding: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        /* 全体を包むコンテナ */
+        .invitation-container {
+            position: relative;
+            width: 340px; /* スマートフォンサイズを想定 */
+            height: 100vh; /* 画面全体の高さを利用 */
+            overflow-y: auto; /* 詳細ページでスクロールが必要になる場合を想定 */
+            background-color: var(--ivory);
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            -webkit-overflow-scrolling: touch; /* iOSのスクロールを滑らかに */
+        }
 
-        /* 封筒だけを最後にスッと消す（カードとフォームは残す） */
-        .envelope, .env-front { animation: fadeOutEnv 0.8s forwards 6.5s; }
-        @keyframes fadeOutEnv { to { opacity: 0; } }
+        /* --- Welcome画面 --- */
+        .welcome-screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            background-color: var(--ivory);
+            transition: transform 0.8s ease-out;
+            cursor: pointer; /* タップ可能であることを示す */
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+            z-index: 10;
+        }
+
+        .welcome-text {
+            font-size: 2.2rem;
+            color: var(--forest-green);
+            font-weight: 600;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+
+        .welcome-photo {
+            width: 280px; /* コンテナ内での写真の幅 */
+            height: 200px; /* 写真の高さ */
+            background-color: #D3D3D3; /* 仮の画像の色 */
+            background-image: url('https://via.placeholder.com/280x200?text=Your+Wedding+Photo'); /* イメージ画像 */
+            background-size: cover;
+            background-position: center;
+            border: 1px solid var(--forest-green);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* --- Detail画面 --- */
+        .detail-screen {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; min-height: 100%; /* 内容に応じて伸びる */
+            background-color: var(--ivory);
+            transform: translateY(100vh); /* 最初は画面外の下に隠す */
+            transition: transform 0.8s ease-out;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            z-index: 5; /* Welcome画面の下に隠す */
+        }
+
+        .detail-title {
+            font-size: 1.8rem;
+            color: var(--forest-green);
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .detail-section {
+            margin-bottom: 30px;
+            border-bottom: 1px dashed rgba(45, 64, 46, 0.2);
+            padding-bottom: 20px;
+        }
+        .detail-section:last-of-type { border-bottom: none; margin-bottom: 0; padding-bottom: 0;}
+
+        .detail-section h3 {
+            font-size: 1.2rem;
+            color: var(--forest-green);
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .detail-section p {
+            font-size: 0.9rem;
+            color: #555;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* RSVPフォーム */
+        .rsvp-form {
+            margin-top: 30px;
+        }
+        .rsvp-form p {
+            font-size: 0.9rem;
+            color: var(--forest-green);
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-bottom: 1px solid var(--forest-green);
+            background-color: transparent;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--forest-green);
+            box-sizing: border-box;
+            outline: none;
+        }
+        select {
+            -webkit-appearance: none; /* デフォルトのスタイルを無効化 */
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%232D402E%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-6.5%200-12.1%203.4-14.7%208.1-2.6%204.7-1.3%2010.4%203.1%2014.2l128%20127.9c4.2%204.2%2011%204.2%2015.2%200l128-127.9c4.5-3.8%205.8-9.5%203.2-14.2z%22%2F%3E%3C%2Fsvg%3E');
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 12px;
+        }
+
+
+        .btn {
+            background-color: var(--forest-green);
+            color: var(--ivory);
+            padding: 15px;
+            border: none;
+            width: 100%;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .btn:hover {
+            background-color: #3e5a3f;
+        }
+
+        /* JavaScriptで追加されるクラス */
+        .welcome-screen.hidden {
+            transform: translateY(-100vh); /* 上にスライドして隠れる */
+        }
+        .detail-screen.visible {
+            transform: translateY(0); /* 下からスライドして表示される */
+        }
     </style>
 </head>
 <body>
 
-    <div class="wrapper">
-        <div class="flap"></div>
-        <div class="envelope"></div>
-        
-        <div class="card">
-            <div class="card-content">
-                <p style="font-size: 0.7rem; letter-spacing: 4px; margin: 0;">INVITATION</p>
-                <div class="names">GENEVIEVE<br>&<br>CHARLES</div>
-                <p style="font-size: 0.9rem; margin: 0;">JUNE 14, 2026</p>
-                
-                <div class="rsvp-section">
-                    <p style="font-size: 0.8rem; margin-bottom: 15px;">RSVP</p>
-                    <input type="text" placeholder="Your Full Name">
-                    <select>
-                        <option value="" disabled selected>Will you attend?</option>
-                        <option value="yes">Joyfully Accepts</option>
-                        <option value="no">Regretfully Declines</option>
-                    </select>
-                    <button class="btn">SEND RESPONSE</button>
-                </div>
-            </div>
+    <div class="invitation-container" id="invitationContainer">
+        <div class="welcome-screen" id="welcomeScreen">
+            <p class="welcome-text">
+                WELCOME TO<br>OUR WEDDING
+            </p>
+            <div class="welcome-photo"></div>
+            <p style="font-size: 0.8rem; color: #777; margin-top: 30px;">Tap to view details</p>
         </div>
 
-        <div class="env-front"></div>
+        <div class="detail-screen" id="detailScreen">
+            <h2 class="detail-title">Our Special Day</h2>
+
+            <div class="detail-section">
+                <h3>Date & Time</h3>
+                <p>June 14, 2026<br>Ceremony: 3:00 PM<br>Reception: 5:00 PM</p>
+            </div>
+
+            <div class="detail-section">
+                <h3>Venue</h3>
+                <p>The Grand Ballroom<br>123 Main Street, Cityville</p>
+            </div>
+
+            <div class="rsvp-form">
+                <p>Please RSVP by May 14, 2026</p>
+                <input type="text" placeholder="Your Full Name">
+                <input type="email" placeholder="Your Email">
+                <select>
+                    <option value="" disabled selected>Will you attend?</option>
+                    <option value="yes">Joyfully Accepts</option>
+                    <option value="no">Regretfully Declines</option>
+                </select>
+                <textarea placeholder="Any message or dietary restrictions?" rows="3"></textarea>
+                <button class="btn">SEND RSVP</button>
+            </div>
+        </div>
     </div>
+
+    <script>
+        document.getElementById('welcomeScreen').addEventListener('click', function() {
+            document.getElementById('welcomeScreen').classList.add('hidden');
+            document.getElementById('detailScreen').classList.add('visible');
+            // 詳細画面が表示されたら、コンテナのスクロールを一番上に戻す
+            document.getElementById('invitationContainer').scrollTop = 0;
+        });
+    </script>
 
 </body>
 </html>
