@@ -7,95 +7,93 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root { --forest-green: #2D402E; --ivory: #F3F0E7; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--ivory); display: flex; justify-content: center; align-items: center; font-family: 'Cormorant Garamond', serif; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; background: var(--ivory); display: flex; justify-content: center; align-items: center; overflow-x: hidden; font-family: 'Cormorant Garamond', serif; }
 
-        /* 1. 封筒の本体：ここが「物理的な箱」になります */
-        .envelope-box {
-            position: relative;
-            width: 340px; height: 240px;
-            background: var(--forest-green); /* これが背面になります */
-            /* ★最重要：この箱からはみ出すものは、一切表示しません */
-            overflow: hidden; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        /* 全体コンテナ */
+        .wrapper { position: relative; width: 340px; height: 500px; display: flex; justify-content: center; align-items: flex-end; padding-bottom: 50px; }
+
+        /* 1. 封筒の土台 (背面) */
+        .envelope {
+            position: absolute; bottom: 50px; width: 340px; height: 240px;
+            background: var(--forest-green); z-index: 1; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        /* 2. 案内状：最初は封筒の「中（下の方）」に隠します */
-        .card-container {
-            position: absolute;
-            bottom: -220px; /* 封筒の底より下に沈めます。overflow: hiddenにより、完全に見えなくなります */
-            left: 15px; width: 310px; height: 400px; /* 展開後の高さも確保 */
-            z-index: 2;
-            transition: transform 2.5s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: slideUp 2.5s forwards 2.5s;
+        /* 2. カード：最初は封筒の中に完全に隠す */
+        .card {
+            position: absolute; bottom: 60px; /* 封筒の内側に配置 */
+            width: 310px; height: 440px; background: var(--ivory); border: 1px solid var(--forest-green);
+            z-index: 2; /* 背面(1)と前面(3)の間 */
+            display: flex; flex-direction: column;
+            transform: translateY(180px); /* 封筒の底に沈める */
+            opacity: 0;
+            transition: all 0.5s;
+            animation: slideUpAndStay 2.5s cubic-bezier(0.4, 0, 0.2, 1) forwards 2.5s;
         }
 
-        /* 3. 封筒の前面：V字の形をした「手前の壁」 */
+        /* 3. 封筒の前面：V字カット */
         .env-front {
-            position: absolute; inset: 0;
-            background: var(--forest-green);
-            z-index: 3;
-            /* V字の切り込み。この後ろにカードが潜り込みます */
+            position: absolute; bottom: 50px; width: 340px; height: 240px;
+            background: var(--forest-green); z-index: 3;
             clip-path: polygon(0 40%, 50% 60%, 100% 40%, 100% 100%, 0 100%);
         }
 
-        /* 4. 封筒の蓋：最初は閉じています */
+        /* 4. 封筒の蓋 */
         .flap {
-            position: absolute; top: 0; left: 0;
+            position: absolute; bottom: 240px; left: 0;
             border-left: 170px solid transparent; border-right: 170px solid transparent;
             border-top: 135px solid var(--forest-green);
-            transform-origin: top; z-index: 4;
+            transform-origin: bottom; z-index: 4;
             animation: openFlap 1.2s forwards 1s;
         }
 
-        /* アニメーション：カードが「箱の中」から「箱の外」へ */
-        @keyframes openFlap { to { transform: rotateX(180deg); z-index: 0; } }
+        /* アニメーション */
+        @keyframes openFlap { to { transform: rotateX(180deg) translateY(270px); z-index: 0; } }
         
-        @keyframes slideUp { 
-            0% { transform: translateY(0); }
-            /* 封筒の「中」から、一気に画面上部へ。
-               移動中、封筒の枠（overflow:hidden）を抜けるまでは「中」に見えます */
-            100% { transform: translateY(-450px); } 
+        @keyframes slideUpAndStay {
+            0% { transform: translateY(180px); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-240px); opacity: 1; z-index: 100; }
         }
 
-        /* 封筒自体を最後に消す */
-        .all-wrapper { animation: fadeOut 0.5s forwards 7.5s; }
-        @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
+        /* カード内部：上下に分割せず、1枚の長いカードとして扱う（突き抜け防止） */
+        .card-content { padding: 30px 20px; flex: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .names { font-size: 1.8rem; color: var(--forest-green); font-weight: 600; margin: 20px 0; line-height: 1.2; }
+        .rsvp-section { width: 100%; margin-top: auto; border-top: 1px dashed var(--forest-green); padding-top: 20px; }
+        
+        input, select { width: 100%; margin-bottom: 10px; padding: 10px; border: none; border-bottom: 1px solid var(--forest-green); background: transparent; font-family: inherit; font-size: 0.9rem; }
+        .btn { background: var(--forest-green); color: var(--ivory); border: none; padding: 12px; width: 100%; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
-        /* カードの見た目 */
-        .card-top { height: 200px; background: var(--ivory); border: 1px solid var(--forest-green); display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .card-bottom { height: 200px; background: var(--ivory); border: 1px solid var(--forest-green); transform-origin: top; transform: rotateX(179deg); animation: unfold 1.2s forwards 5.5s; backface-visibility: hidden; }
-        @keyframes unfold { to { transform: rotateX(0deg); } }
-
-        .names { font-size: 1.6rem; color: var(--forest-green); font-weight: 600; text-align: center; }
-        .rsvp-form { padding: 10px; font-size: 0.8rem; }
-        input, select { width: 100%; margin-bottom: 5px; padding: 5px; border: none; border-bottom: 1px solid var(--forest-green); background: transparent; font-family: inherit; }
-        .btn { background: var(--forest-green); color: var(--ivory); border: none; padding: 10px; width: 100%; font-weight: bold; }
+        /* 封筒だけを最後にスッと消す（カードとフォームは残す） */
+        .envelope, .env-front { animation: fadeOutEnv 0.8s forwards 6.5s; }
+        @keyframes fadeOutEnv { to { opacity: 0; } }
     </style>
 </head>
 <body>
 
-    <div class="all-wrapper">
-        <div class="envelope-box">
-            <div class="flap"></div>
-            
-            <div class="card-container">
-                <div class="card-top">
-                    <p style="font-size: 0.6rem; letter-spacing: 3px;">INVITATION</p>
-                    <div class="names">GENEVIEVE<br>& CHARLES</div>
-                    <p style="font-size: 0.8rem;">JUNE 14, 2026</p>
-                </div>
-                <div class="card-bottom">
-                    <div class="rsvp-form">
-                        <p style="text-align: center; margin: 0 0 5px 0;">RSVP</p>
-                        <input type="text" placeholder="Your Name">
-                        <select><option value="">Attendance</option><option value="yes">Accepts</option></select>
-                        <button class="btn">SEND RESPONSE</button>
-                    </div>
+    <div class="wrapper">
+        <div class="flap"></div>
+        <div class="envelope"></div>
+        
+        <div class="card">
+            <div class="card-content">
+                <p style="font-size: 0.7rem; letter-spacing: 4px; margin: 0;">INVITATION</p>
+                <div class="names">GENEVIEVE<br>&<br>CHARLES</div>
+                <p style="font-size: 0.9rem; margin: 0;">JUNE 14, 2026</p>
+                
+                <div class="rsvp-section">
+                    <p style="font-size: 0.8rem; margin-bottom: 15px;">RSVP</p>
+                    <input type="text" placeholder="Your Full Name">
+                    <select>
+                        <option value="" disabled selected>Will you attend?</option>
+                        <option value="yes">Joyfully Accepts</option>
+                        <option value="no">Regretfully Declines</option>
+                    </select>
+                    <button class="btn">SEND RESPONSE</button>
                 </div>
             </div>
-
-            <div class="env-front"></div>
         </div>
+
+        <div class="env-front"></div>
     </div>
 
 </body>
