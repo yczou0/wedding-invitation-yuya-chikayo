@@ -95,10 +95,8 @@
             min-height: 100%;
         }
         
-        /* 【修正箇所】1287x966の比率（約1.33:1）に合わせて高さを自動計算 */
         .detail-hero-img {
             width: 100%; 
-            /* 幅100%に対して、指定ピクセル比率(966/1287)で高さを確保 */
             aspect-ratio: 1287 / 966; 
             background-image: url('wdpic.jpeg'); 
             background-size: cover; 
@@ -108,13 +106,23 @@
 
         .content-body { padding: 40px 25px; text-align: center; }
         .section-title { font-size: 1.6rem; border-bottom: 1px solid var(--black); padding-bottom: 10px; margin-bottom: 35px; }
+        
         .info-block { margin-bottom: 30px; }
         .info-block h3 { font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px; opacity: 0.7; }
         .info-block p { font-size: 1.1rem; line-height: 1.6; margin: 0; }
 
-        .rsvp-form { margin-top: 50px; border-top: 1px solid var(--black); padding-top: 40px; }
-        input, select { width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid var(--black); background: transparent; box-sizing: border-box; }
-        .btn { background: var(--black); color: var(--white); border: none; padding: 18px; width: 100%; font-weight: bold; cursor: pointer; letter-spacing: 2px; }
+        /* RSVPフォームの調整 */
+        .rsvp-form { margin-top: 50px; border-top: 1px solid var(--black); padding-top: 40px; text-align: left; }
+        .rsvp-form label { display: block; font-size: 0.8rem; margin-bottom: 5px; letter-spacing: 1px; font-weight: 600; }
+        input, select, textarea { 
+            width: 100%; padding: 12px; margin-bottom: 25px; border: 1px solid var(--black); 
+            background: transparent; font-family: inherit; box-sizing: border-box; font-size: 1rem;
+        }
+        textarea { height: 80px; resize: none; }
+        .btn { 
+            background: var(--black); color: var(--white); border: none; padding: 18px; 
+            width: 100%; font-weight: bold; cursor: pointer; letter-spacing: 2px; margin-top: 10px;
+        }
 
     </style>
 </head>
@@ -128,32 +136,40 @@
                     <div class="fan-img"></div>
                     <div class="yc-name">Y & C</div>
                 </div>
-                <div class="welcome-text">WELCOME TO<br>OUR WEDDING</div>
+                <div class="welcome-text">WELCOME TO<br>OUR WEB INVITATION</div>
                 <div class="tap-hint">TAP TO OPEN</div>
             </div>
 
             <div id="detailScreen">
                 <div class="detail-hero-img"></div>
                 <div class="content-body">
-                    <h2 class="section-title">Invitation</h2>
-                    <div class="info-block">
-                        <h3>Date</h3>
-                        <p>Saturday, June 14, 2026<br>3:00 PM</p>
-                    </div>
-                    <div class="info-block">
-                        <h3>Venue</h3>
-                        <p>The Grand Heritage<br>Aoyama, Tokyo</p>
-                    </div>
+                    <h2 class="section-title">RSVP</h2>
+                    
                     <div class="rsvp-form">
-                        <input type="text" placeholder="Your Name">
+                        <label>Name (Latin)</label>
+                        <input type="text" placeholder="お名前をローマ字で記入してください">
+
+                        <label>Attendance</label>
                         <select>
-                            <option value="" disabled selected>Attendance</option>
-                            <option value="yes">Joyfully Accepts</option>
-                            <option value="no">Regretfully Declines</option>
+                            <option value="" disabled selected>ご出席についてお選びください</option>
+                            <option value="yes">ご出席</option>
+                            <option value="no">ご欠席</option>
                         </select>
+
+                        <label>Stay</label>
+                        <select>
+                            <option value="" disabled selected>宿泊についてお選びください</option>
+                            <option value="stay-yes">宿泊可能</option>
+                            <option value="stay-no">宿泊不可</option>
+                        </select>
+
+                        <label>Allergy</label>
+                        <textarea placeholder="アレルギーがある場合はご入力ください"></textarea>
+
                         <button class="btn">SEND RESPONSE</button>
                     </div>
-                </div>
+
+                    <div style="height: 100px;"></div> </div>
             </div>
 
         </div>
