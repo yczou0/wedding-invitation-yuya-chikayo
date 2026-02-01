@@ -107,21 +107,13 @@
             line-height: 1.8; color: #333;
         }
 
-        /* Access情報のスタイル */
-        .access-info {
-            margin-top: 15px;
-            font-size: 0.9rem;
-            color: var(--black);
-            font-family: "Hiragino Mincho ProN", serif;
-        }
-
         .map-btn-container { 
-            margin: 30px auto 0; 
+            margin: 25px auto 0; 
             width: 100%; 
         }
         .map-btn {
             display: block;
-            padding: 18px;
+            padding: 16px;
             border: 1px solid var(--black);
             color: var(--white);
             background-color: var(--black);
@@ -129,15 +121,23 @@
             font-size: 0.85rem;
             letter-spacing: 2px;
             font-weight: 600;
-            transition: opacity 0.3s;
         }
-        .map-btn:active { opacity: 0.7; }
 
+        /* RSVPフォーム */
         .rsvp-form { margin-top: 60px; border-top: 1px solid var(--black); padding-top: 50px; text-align: left; }
         .rsvp-deadline { text-align: center; font-size: 0.9rem; color: var(--black); margin-bottom: 40px; line-height: 1.6; font-family: "Hiragino Mincho ProN", serif; }
         
         .rsvp-form label { display: block; font-size: 0.8rem; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600; }
         
+        /* 注釈スタイル */
+        .input-hint {
+            display: block;
+            font-size: 0.7rem;
+            color: #666;
+            margin-bottom: 12px;
+            font-family: "Hiragino Mincho ProN", serif;
+        }
+
         .name-row { display: flex; gap: 10px; width: 100%; margin-bottom: 25px; }
         .name-field { flex: 1; }
 
@@ -177,18 +177,18 @@
                         
                         <div class="detail-item">
                             <span class="detail-label">Date</span>
-                            <p class="detail-value">Wednesday, May 6, 2026<br>1:00 PM</p>
+                            <p class="detail-value">Wednesday, May 6, 2026<br>13:00 Start</p>
                         </div>
 
                         <div class="detail-item">
                             <span class="detail-label">Venue</span>
                             <p class="detail-value">ZENBO SEINEI</p>
                             <p class="jp-address">禅坊 靖寧<br>〒656-2301 兵庫県淡路市楠本 字場中2594-5</p>
-                            
-                            <div class="access-info">
-                                ACCESS：淡路ICより車で5分
-                            </div>
+                        </div>
 
+                        <div class="detail-item">
+                            <span class="detail-label">Access</span>
+                            <p class="detail-value" style="font-family: 'Hiragino Mincho ProN', serif; font-size: 1.1rem;">淡路ICより車で5分</p>
                             <div class="map-btn-container">
                                 <a href="https://maps.google.com/?q=禅坊+靖寧" target="_blank" class="map-btn">
                                     VIEW ON GOOGLE MAPS
@@ -201,9 +201,11 @@
                         <p class="rsvp-deadline">大変お手数ですが、<br>3月1日(日)までにご回答をお願いします</p>
                         
                         <label>Name (Latin)</label>
+                        <span class="input-hint">※お名前はローマ字でご入力ください</span>
+                        
                         <div class="name-row">
-                            <div class="name-field"><input type="text" placeholder="Last Name (姓)"></div>
-                            <div class="name-field"><input type="text" placeholder="First Name (名)"></div>
+                            <div class="name-field"><input type="text" placeholder="Last Name"></div>
+                            <div class="name-field"><input type="text" placeholder="First Name"></div>
                         </div>
 
                         <label>Attendance</label>
