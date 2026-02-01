@@ -6,7 +6,7 @@
     <title>Wedding Invitation</title>
     <link href="https://fonts.googleapis.com/css2?family=Water+Brush&family=Cormorant+Garamond:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --black: #1a1a1a; --white: #ffffff; }
+        :root { --black: #1a1a1a; --white: #ffffff; --gold: #c5a059; }
         
         body, html { 
             margin: 0; padding: 0; width: 100%; height: 100%; 
@@ -29,8 +29,7 @@
         }
 
         .invitation-container { 
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             position: relative; 
             overflow-y: auto; 
             -webkit-overflow-scrolling: touch; 
@@ -38,42 +37,31 @@
 
         /* --- Welcome画面 --- */
         #welcomeScreen {
-            position: absolute; 
-            top: 0; left: 0;
+            position: absolute; top: 0; left: 0;
             width: 100%; height: 100%;
-            display: flex; 
-            flex-direction: column;
-            justify-content: center; 
-            align-items: center; 
-            background: var(--white);
-            z-index: 9999;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center; 
+            background: var(--white); z-index: 9999;
             cursor: pointer;
             transition: all 0.8s cubic-bezier(0.77, 0, 0.175, 1);
         }
 
         .fan-box {
-            position: relative;
-            width: 340px; height: 220px;
-            margin-bottom: 10px;
-            pointer-events: none;
+            position: relative; width: 340px; height: 220px;
+            margin-bottom: 10px; pointer-events: none;
         }
 
         .fan-img {
             width: 100%; height: 100%;
             background-image: url('fan.jfif'); 
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
+            background-size: contain; background-repeat: no-repeat; background-position: center;
         }
 
         .yc-name {
-            position: absolute;
-            top: 31%; left: 50%;
+            position: absolute; top: 31%; left: 50%;
             transform: translateX(-50%);
             font-family: 'Water Brush', cursive;
-            font-size: 2.1rem; 
-            color: var(--black);
-            white-space: nowrap;
+            font-size: 2.1rem; color: var(--black); white-space: nowrap;
         }
 
         .welcome-text { 
@@ -89,45 +77,41 @@
         @keyframes blink { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.1; } }
 
         /* --- Detail画面 --- */
-        #detailScreen { 
-            display: none; 
-            width: 100%;
-            min-height: 100%;
-        }
+        #detailScreen { display: none; width: 100%; min-height: 100%; }
         
         .detail-hero-img {
-            width: 100%; 
-            aspect-ratio: 1287 / 966; 
+            width: 100%; aspect-ratio: 1287 / 966; 
             background-image: url('wdpic.jpeg'); 
-            background-size: cover; 
-            background-position: center;
+            background-size: cover; background-position: center;
             background-color: #f0f0f0;
         }
 
         .content-body { padding: 40px 25px; text-align: center; }
-        .section-title { font-size: 1.6rem; border-bottom: 1px solid var(--black); padding-bottom: 10px; margin-bottom: 35px; }
         
-        .rsvp-form { margin-top: 50px; border-top: 1px solid var(--black); padding-top: 40px; text-align: left; }
-        .rsvp-form label { display: block; font-size: 0.8rem; margin-bottom: 5px; letter-spacing: 1px; font-weight: 600; }
+        /* 招待状詳細セクション */
+        .event-details { margin-bottom: 60px; }
+        .detail-title { font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
+        .detail-item { margin-bottom: 40px; }
+        .detail-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
+        .detail-value { font-size: 1.3rem; line-height: 1.5; color: var(--black); margin: 0; }
         
-        /* 姓名を横に並べるための設定 */
-        .name-row {
-            display: flex;
-            gap: 10px;
-            width: 100%;
-            margin-bottom: 25px;
-        }
-        .name-field {
-            flex: 1;
-        }
+        /* マップの調整 */
+        .map-container { margin-top: 20px; width: 100%; border: 1px solid #000; height: 200px; overflow: hidden; }
+        .map-container iframe { width: 100% !important; height: 100% !important; border: 0; }
+
+        /* RSVPフォーム */
+        .rsvp-form { margin-top: 80px; border-top: 1px solid var(--black); padding-top: 50px; text-align: left; }
+        .rsvp-section-title { text-align: center; font-size: 1.6rem; margin-bottom: 40px; letter-spacing: 4px; }
+        .rsvp-form label { display: block; font-size: 0.8rem; margin-bottom: 8px; letter-spacing: 1px; font-weight: 600; }
+        
+        .name-row { display: flex; gap: 10px; width: 100%; margin-bottom: 25px; }
+        .name-field { flex: 1; }
 
         input, select, textarea { 
             width: 100%; padding: 12px; margin-bottom: 25px; border: 1px solid var(--black); 
-            background: transparent; font-family: inherit; box-sizing: border-box; font-size: 1rem;
+            background: transparent; font-family: inherit; box-sizing: border-box; font-size: 1rem; border-radius: 0;
         }
-        /* 姓名入力欄の余白を調整 */
         .name-row input { margin-bottom: 0; }
-        
         textarea { height: 80px; resize: none; }
         .btn { 
             background: var(--black); color: var(--white); border: none; padding: 18px; 
@@ -152,10 +136,28 @@
 
             <div id="detailScreen">
                 <div class="detail-hero-img"></div>
+                
                 <div class="content-body">
-                    <h2 class="section-title">RSVP</h2>
-                    
+                    <div class="event-details">
+                        <h2 class="detail-title">Wedding Details</h2>
+                        
+                        <div class="detail-item">
+                            <span class="detail-label">Date</span>
+                            <p class="detail-value">Wednesday, May 6, 2026</p>
+                        </div>
+
+                        <div class="detail-item">
+                            <span class="detail-label">Venue</span>
+                            <p class="detail-value">ZENBO SEINEI</p>
+                            <div class="map-container">
+                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3286.965749320677!2d134.92983791163456!3d34.52906419295551!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35537d6e4a2c5625%3A0xc682914106579df6!2z56aF5Z2KIOmdluiaqw!5e0!3m2!1sja!2sjp!4v1714546445582!5m2!1sja!2sjp" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="rsvp-form">
+                        <h2 class="rsvp-section-title">RSVP</h2>
+                        
                         <label>Name (Latin)</label>
                         <div class="name-row">
                             <div class="name-field">
