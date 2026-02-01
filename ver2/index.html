@@ -72,8 +72,7 @@
         .welcome-text { 
             font-size: 1.3rem; color: var(--black); letter-spacing: 3px; 
             text-align: center; margin-top: 15px; pointer-events: none;
-            line-height: 1.6;
-            font-weight: 700; 
+            line-height: 1.6; font-weight: 700; 
         }
 
         .tap-hint { 
@@ -99,43 +98,39 @@
         .detail-title { font-size: 1.8rem; letter-spacing: 3px; margin-bottom: 30px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .detail-item { margin-bottom: 40px; }
         .detail-label { font-size: 0.7rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; display: block; }
-        .detail-value { font-size: 1.3rem; line-height: 1.5; color: var(--black); margin: 0; }
+        .detail-value { font-size: 1.3rem; line-height: 1.5; color: var(--black); margin: 0; font-weight: 400; }
         
         .jp-address { 
             font-size: 0.9rem; 
             font-family: "Hiragino Mincho ProN", "MS Mincho", serif; 
             margin-top: 10px; 
-            line-height: 1.8;
-            color: #333;
+            line-height: 1.8; color: #333;
         }
 
-        /* 代替案：静止画マップ表示用スタイル */
-        .map-static-container { 
+        /* 会場画像リンクのスタイル */
+        .venue-link-container { 
             margin: 25px auto 0; 
             width: 100%; 
             position: relative;
-            text-align: center;
         }
-        .map-image {
+        .venue-img {
             width: 100%;
             height: auto;
             border: 1px solid #eee;
             box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             display: block;
         }
-        .map-link-btn {
-            display: inline-block;
+        .map-btn {
+            display: block;
             margin-top: 15px;
-            padding: 10px 20px;
-            background: #f8f8f8;
+            padding: 15px;
             border: 1px solid var(--black);
             color: var(--black);
             text-decoration: none;
             font-size: 0.8rem;
-            letter-spacing: 1px;
-            transition: all 0.3s;
+            letter-spacing: 2px;
+            font-weight: 600;
         }
-        .map-link-btn:active { background: #eee; }
 
         .rsvp-form { margin-top: 50px; border-top: 1px solid var(--black); padding-top: 50px; text-align: left; }
         .rsvp-deadline { text-align: center; font-size: 0.9rem; color: var(--black); margin-bottom: 40px; line-height: 1.6; font-family: "Hiragino Mincho ProN", serif; }
@@ -149,7 +144,6 @@
             width: 100%; padding: 12px; margin-bottom: 25px; border: 1px solid var(--black); 
             background: transparent; font-family: var(--didot); box-sizing: border-box; font-size: 1rem; border-radius: 0;
         }
-        .name-row input { margin-bottom: 0; }
         textarea { height: 80px; resize: none; }
         .btn { 
             background: var(--black); color: var(--white); border: none; padding: 18px; 
@@ -190,14 +184,12 @@
                             <p class="detail-value">ZENBO SEINEI</p>
                             <p class="jp-address">禅坊 靖寧<br>〒656-2301 兵庫県淡路市楠本 字場中2594-5</p>
                             
-                            <div class="map-static-container">
-                                <a href="https://maps.google.com/?q=禅坊+靖寧" target="_blank">
-                                    <img src="https://maps.googleapis.com/maps/api/staticmap?center=34.5787864,134.9854778&zoom=16&size=600x450&markers=color:red%7C34.5787864,134.9854778&key=YOUR_API_KEY_OR_REMOVE_FOR_BASIC" alt="禅坊 靖寧 MAP" class="map-image">
+                            <div class="venue-link-container">
+                                <a href="https://maps.app.goo.gl/N2z59LWhV2R6T9y89" target="_blank" style="text-decoration:none;">
+                                    <img src="https://images.unsplash.com/photo-1518005020480-47432092109e?auto=format&fit=crop&q=80&w=800" alt="ZENBO SEINEI" class="venue-img">
+                                    <div class="map-btn">VIEW ON GOOGLE MAPS</div>
                                 </a>
-                                <a href="https://maps.google.com/?q=禅坊+靖寧" target="_blank" class="map-link-btn">
-                                    GOOGLE MAP で場所を確認する
-                                </a>
-                                <p style="font-size: 0.6rem; margin-top: 8px; opacity: 0.6;">※地図をタップするとGoogleマップが開きます</p>
+                                <p style="font-size: 0.65rem; margin-top: 10px; opacity: 0.6; font-family:serif;">※画像またはボタンをタップすると地図が開きます</p>
                             </div>
                         </div>
                     </div>
@@ -207,12 +199,8 @@
                         
                         <label>Name (Latin)</label>
                         <div class="name-row">
-                            <div class="name-field">
-                                <input type="text" placeholder="Last Name (姓)">
-                            </div>
-                            <div class="name-field">
-                                <input type="text" placeholder="First Name (名)">
-                            </div>
+                            <div class="name-field"><input type="text" placeholder="Last Name (姓)"></div>
+                            <div class="name-field"><input type="text" placeholder="First Name (名)"></div>
                         </div>
 
                         <label>Attendance</label>
@@ -234,11 +222,9 @@
 
                         <button class="btn">SEND RESPONSE</button>
                     </div>
-
                     <div style="height: 100px;"></div>
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -246,10 +232,8 @@
         function openInvitation() {
             const welcome = document.getElementById('welcomeScreen');
             const detail = document.getElementById('detailScreen');
-            
             welcome.style.transform = 'translateY(-100%)';
             welcome.style.opacity = '0';
-            
             setTimeout(() => {
                 welcome.style.display = 'none';
                 detail.style.display = 'block';
